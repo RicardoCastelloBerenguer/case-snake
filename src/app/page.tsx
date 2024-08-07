@@ -1,8 +1,11 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
+import Icons from "@/components/Icons";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import Phone from "@/components/Phone";
+import Reviews from "@/components/Reviews";
 import { buttonVariants } from "@/components/ui/button";
+import UserReview from "@/components/UserReview";
 import { ArrowRight, Check, Star } from "lucide-react";
 import Link from "next/link";
 
@@ -106,6 +109,77 @@ export default function Home() {
             </div>
           </div>
         </MaxWidthWrapper>
+      </section>
+
+      <section id="value-section" className="bg-slate-100 py-24">
+        <MaxWidthWrapper className="flex flex-col items-center gap-16 sm-gap-32">
+          <div className="flex flex-col lg:flex-row items-center gap-4 sm:gap-6">
+            <h2 className="order-1 mt-2 tracking-tight text-center text-balance !leading-tight font-bold text-5xl md:text-6xl text-gray-900">
+              What our{" "}
+              <span className="relative px-2">
+                costumers{" "}
+                <Icons.underline className="hidden sm:block pointer-events-none inset-x-0 absolute -bottom-6 text-green-500"></Icons.underline>{" "}
+              </span>{" "}
+              say
+            </h2>
+
+            <img
+              src="/snake-2.png"
+              className="w-28 order-0 lg:order-2"
+              alt=""
+            />
+          </div>
+
+          <UserReview
+            starCount={5}
+            clientTextReview={{
+              firstText:
+                "The case feels durable and I even got a compliment on the design. Had the case for two and a half months now and",
+              highlightedText: "the image is super clean",
+              secondText: ". I dig it.",
+            }}
+            profile={{ imgUrl: "/users/user-1.png", name: "Jonathan" }}
+          />
+          <UserReview
+            profile={{ imgUrl: "/users/user-2.png", name: "Anna" }}
+            starCount={5}
+            clientTextReview={{
+              firstText:
+                "I usually keep my phone together with my keys in my pocket and that lead to some pretty heavy scratch marks on all of my last phone cases. This one, besides a barely noticeable scratch on the corner,",
+              highlightedText: "looks brand new after about half a year",
+              secondText:
+                ", on the case I had before, the image started fading into yellow-ish color after a couple weeks. Love it ",
+            }}
+          />
+          <UserReview
+            starCount={5}
+            profile={{ imgUrl: "/users/user-3.png", name: "María" }}
+            starCount={5}
+            clientTextReview={{
+              firstText:
+                "I'm always dropping my phone and the last few cases I had barely protected it from getting dinged up. This case, however,",
+              highlightedText: "has been amazing.",
+              secondText:
+                " After six months of use, it only has a tiny scuff on one edge. My previous case got cracks and the design wore off within the first month. This one still looks as good as new. Highly recommend!",
+            }}
+          />
+          <UserReview
+            starCount={5}
+            profile={{ imgUrl: "/users/user-4.jpg", name: "Josh" }}
+            starCount={5}
+            clientTextReview={{
+              firstText:
+                "My phone usually shares a pocket with my coins, which often results in my cases getting scratched up pretty quickly. Surprisingly,",
+              highlightedText: "this case has held up really well",
+              secondText:
+                " After about six months, it only has a slight scratch on one corner. The last case I used turned dull and had the design fade within a few weeks. This one is durable and looks great. Very happy with this purchase!",
+            }}
+          />
+        </MaxWidthWrapper>
+
+        <div className="pt-16">
+          <Reviews />
+        </div>
       </section>
     </div>
   );
