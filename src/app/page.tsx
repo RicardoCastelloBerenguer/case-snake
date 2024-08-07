@@ -4,6 +4,7 @@ import Icons from "@/components/Icons";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import Phone from "@/components/Phone";
 import Reviews from "@/components/Reviews";
+import Footer from "@/components/Footer";
 import { buttonVariants } from "@/components/ui/button";
 import UserReview from "@/components/UserReview";
 import { ArrowRight, Check, Star } from "lucide-react";
@@ -130,56 +131,129 @@ export default function Home() {
             />
           </div>
 
-          <UserReview
-            starCount={5}
-            clientTextReview={{
-              firstText:
-                "The case feels durable and I even got a compliment on the design. Had the case for two and a half months now and",
-              highlightedText: "the image is super clean",
-              secondText: ". I dig it.",
-            }}
-            profile={{ imgUrl: "/users/user-1.png", name: "Jonathan" }}
-          />
-          <UserReview
-            profile={{ imgUrl: "/users/user-2.png", name: "Anna" }}
-            starCount={5}
-            clientTextReview={{
-              firstText:
-                "I usually keep my phone together with my keys in my pocket and that lead to some pretty heavy scratch marks on all of my last phone cases. This one, besides a barely noticeable scratch on the corner,",
-              highlightedText: "looks brand new after about half a year",
-              secondText:
-                ", on the case I had before, the image started fading into yellow-ish color after a couple weeks. Love it ",
-            }}
-          />
-          <UserReview
-            starCount={5}
-            profile={{ imgUrl: "/users/user-3.png", name: "María" }}
-            starCount={5}
-            clientTextReview={{
-              firstText:
-                "I'm always dropping my phone and the last few cases I had barely protected it from getting dinged up. This case, however,",
-              highlightedText: "has been amazing.",
-              secondText:
-                " After six months of use, it only has a tiny scuff on one edge. My previous case got cracks and the design wore off within the first month. This one still looks as good as new. Highly recommend!",
-            }}
-          />
-          <UserReview
-            starCount={5}
-            profile={{ imgUrl: "/users/user-4.jpg", name: "Josh" }}
-            starCount={5}
-            clientTextReview={{
-              firstText:
-                "My phone usually shares a pocket with my coins, which often results in my cases getting scratched up pretty quickly. Surprisingly,",
-              highlightedText: "this case has held up really well",
-              secondText:
-                " After about six months, it only has a slight scratch on one corner. The last case I used turned dull and had the design fade within a few weeks. This one is durable and looks great. Very happy with this purchase!",
-            }}
-          />
+          <div className="grid grid-cols-1 lg:grid-cols-2 lg:max-w-none gap-y-16">
+            <UserReview
+              starCount={5}
+              clientTextReview={{
+                firstText:
+                  "The case feels durable and I even got a compliment on the design. Had the case for two and a half months now and",
+                highlightedText: "the image is super clean",
+                secondText: ". I dig it.",
+              }}
+              profile={{ imgUrl: "/users/user-1.png", name: "Jonathan" }}
+            />
+            <UserReview
+              profile={{ imgUrl: "/users/user-2.png", name: "Anna" }}
+              starCount={5}
+              clientTextReview={{
+                firstText:
+                  "I usually keep my phone together with my keys in my pocket and that lead to some pretty heavy scratch marks on all of my last phone cases. This one, besides a barely noticeable scratch on the corner,",
+                highlightedText: "looks brand new after about half a year",
+                secondText:
+                  ", on the case I had before, the image started fading into yellow-ish color after a couple weeks. Love it ",
+              }}
+            />
+            <UserReview
+              starCount={5}
+              profile={{ imgUrl: "/users/user-3.png", name: "María" }}
+              starCount={5}
+              clientTextReview={{
+                firstText:
+                  "I'm always dropping my phone and the last few cases I had barely protected it from getting dinged up. This case, however,",
+                highlightedText: "has been amazing.",
+                secondText:
+                  " After six months of use, it only has a tiny scuff on one edge. My previous case got cracks and the design wore off within the first month. This one still looks as good as new. Highly recommend!",
+              }}
+            />
+            <UserReview
+              starCount={5}
+              profile={{ imgUrl: "/users/user-4.jpg", name: "Josh" }}
+              starCount={5}
+              clientTextReview={{
+                firstText:
+                  "My phone usually shares a pocket with my coins, which often results in my cases getting scratched up pretty quickly. Surprisingly,",
+                highlightedText: "this case has held up really well",
+                secondText:
+                  " After about six months, it only has a slight scratch on one corner. The last case I used turned dull and had the design fade within a few weeks. This one is durable and looks great. Very happy with this purchase!",
+              }}
+            />
+          </div>
         </MaxWidthWrapper>
 
         <div className="pt-16">
           <Reviews />
         </div>
+      </section>
+
+      <section>
+        <MaxWidthWrapper className="py-24">
+          <div className="mb-12 px-6 lg:px-8">
+            <div className="mx-auto max-w-2xl sm:text-center">
+              <h2 className="order-1 mt-2 tracking-tight text-center text-balance !leading-tight font-bold text-5xl md:text-6xl text-gray-900">
+                Upload your photo and get{" "}
+                <span className="relative px-2 bg-green-600 text-white">
+                  your own case{" "}
+                </span>{" "}
+                now
+              </h2>
+            </div>
+          </div>
+
+          <div className="mx-auto max-w-6xl px-6 lg:px-8">
+            <div className="relative flex flex-col items-center md:grid grid-cols-2 gap-40">
+              <img
+                src="/arrow.png"
+                className="absolute top-[25rem] md:top-1/2 -translate-y-1/2 z-10 left-1/2 -translate-x-1/2 rotate-90 md:rotate-0"
+                alt="Arrow image"
+              />
+
+              <div className="relative h-80 md:h-full w-full md:justify-self-end max-w-sm rounded-xl bg-gray-900/5 ring-inset ring-gray-900/10 lg:rounded-2xl">
+                <img
+                  src="/horse.jpg"
+                  className="rounded-md object-cover bg-white shadow-2xl ring-1 ring-gray-900/10 h-full w-full"
+                  alt="Horse Image"
+                />
+              </div>
+
+              <Phone className="w-60" imgSource="/horse.jpg" />
+            </div>
+          </div>
+
+          <ul className="mx-auto mt-12 max-w-prose sm:text-lg space-y-2 w-fit">
+            <li className="w-fit">
+              <Check className="size-5 text-green-600 inline mr-1.5 " />
+              <p className="inline">High quality silicone material</p>
+            </li>
+            <li className="w-fit">
+              <Check className="size-5 text-green-600 inline mr-1.5 " />
+              <p className="inline">Anti-slip to prevent accidental drops</p>
+            </li>
+            <li className="w-fit">
+              <Check className="size-5 text-green-600 inline mr-1.5 " />
+              <p className="inline">Scratch and wear-resistant</p>
+            </li>
+            <li className="w-fit">
+              <Check className="size-5 text-green-600 inline mr-1.5 " />
+              <p className="inline">5 year print warranty</p>
+            </li>
+            <li className="w-fit">
+              <Check className="size-5 text-green-600 inline mr-1.5 " />
+              <p className="inline">Compatibility with wireless charging</p>
+            </li>
+
+            <div className="flex justify-center">
+              <Link
+                className={buttonVariants({
+                  size: "lg",
+                  className: "mx-auto mt-8",
+                })}
+                href={"/configure/upload"}
+              >
+                Create your own case now
+              </Link>
+            </div>
+          </ul>
+        </MaxWidthWrapper>
       </section>
     </div>
   );

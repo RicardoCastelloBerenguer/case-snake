@@ -33,7 +33,7 @@ const Phone = ({
 
       <div className="absolute -z-10 inset-0">
         <img
-          className="object-cover"
+          className="object-cover w-full h-full"
           src={imgSource}
           alt="overlaying phone image"
         />
