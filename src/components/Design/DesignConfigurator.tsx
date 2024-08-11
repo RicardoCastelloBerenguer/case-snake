@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 import ShadcnImage from "next/image";
 
@@ -27,8 +27,11 @@ import {
   MODELS,
 } from "@/validators/option-validator";
 import { Button } from "../ui/button";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { ArrowRight, Check, ChevronsUpDown } from "lucide-react";
 import { Description } from "@radix-ui/react-toast";
+import { BASE_PRICE } from "@/config/products";
+import { useUploadThing } from "@/lib/uploadthings";
+import { useToast } from "../ui/use-toast";
 
 interface DesignConfiguratorProps {
   configId: string;
@@ -41,6 +44,8 @@ const DesignConfigurator = ({
   imageDimensions,
   imageUrl,
 }: DesignConfiguratorProps) => {
+  const { toast } = useToast();
+
   const [options, setOptions] = useState<{
     color: (typeof COLORS)[number];
     model: (typeof MODELS.options)[number];
@@ -53,15 +58,113 @@ const DesignConfigurator = ({
     finish: FINISHES.options[0],
   });
 
+  const [renderedImageDimension, setRenderedImageDimension] = useState({
+    width: imageDimensions.width / 4,
+    height: imageDimensions.height / 4,
+  });
+
+  const [renderedImagePosition, setRenderedImagePosition] = useState({
+    x: 125,
+    y: 215,
+  });
+
+  const phoneContainerRef = useRef<HTMLDivElement>(null);
+  const phoneCaseRef = useRef<HTMLDivElement>(null);
+
+  const { startUpload } = useUploadThing("imageUploader");
+
+  const saveConfiguration = async () => {
+    try {
+      const {
+        left: phoneCaseLeft,
+        top: phoneCaseTop,
+        width,
+        height,
+      } = phoneCaseRef.current!.getBoundingClientRect();
+
+      const { left: phoneContainerLeft, top: phoneContainerTop } =
+        phoneContainerRef.current!.getBoundingClientRect();
+
+      const leftOffset = phoneCaseLeft - phoneContainerLeft;
+
+      const topOffset = phoneCaseTop - phoneContainerTop;
+
+      const actualX = renderedImagePosition.x - leftOffset;
+      const actualY = renderedImagePosition.y - topOffset;
+
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+
+      const canvasContext = canvas.getContext("2d");
+
+      const userImage = new Image();
+      userImage.crossOrigin = "anonymous";
+      userImage.src = imageUrl;
+
+      await loadImage(userImage);
+
+      canvasContext?.drawImage(
+        userImage,
+        actualX,
+        actualY,
+        renderedImageDimension.width,
+        renderedImageDimension.height
+      );
+
+      const base64ConvertedImage = canvas.toDataURL();
+
+      // Get actual data of the image and cut from the comma innecesary string
+      // base64ConvertedImage = {data: 'image/png;base64  ->,<-  imgDataString'}
+
+      const base64ConvertedImageData = base64ConvertedImage.split(",")[1];
+
+      const blob = base64ToBlob(base64ConvertedImageData, "image/png");
+      const file = new File([blob], "filename.png", { type: "image/png" });
+
+      await startUpload([file], { configId });
+    } catch (err) {
+      alert("Error uploading");
+      toast({
+        title: "Something went wrong",
+        description:
+          "There was an error saving your configuration, please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const base64ToBlob = (base64: string, mimeType: string) => {
+    const byteCharacters = atob(base64);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+
+    return new Blob([byteArray], { type: mimeType });
+  };
+  const loadImage = (
+    imgElement: HTMLImageElement
+  ): Promise<HTMLImageElement> => {
+    return new Promise((resolve, reject) => {
+      imgElement.onload = () => resolve(imgElement);
+      imgElement.onerror = reject;
+    });
+  };
+
   return (
-    <div className="relative mt-20 grid grid-cols-3 mb-20 pb-20">
+    <div className="relative mt-20 grid grid-cols-1 lg:grid-cols-3 mb-20 pb-20">
       <div
+        ref={phoneContainerRef}
         className="relative h-[37.5rem] overflow-hidden col-span-2 w-full max-w-4xl flex items-center justify-center ç
         rounded-lg border-2 border-dashed border-gray-300 p-12 text-center focus:outline-none focus-ring-2 focus:ring-primary 
         focus:ring-offset-2"
       >
         <div className="relative w-60 bg-opacity-50 pointer-events-none aspect-[896/1831]">
           <AspectRatio
+            ref={phoneCaseRef}
             ratio={896 / 1831}
             className="pointer-events-none relative z-50 aspect-[896-1831] w-full"
           >
@@ -88,6 +191,24 @@ const DesignConfigurator = ({
             height: imageDimensions.height / 4,
             width: imageDimensions.width / 4,
           }}
+          onResizeStop={(_, __, elementRef, ___, position) => {
+            const height = parseInt(elementRef.style.height.slice(0, -2));
+            const width = parseInt(elementRef.style.width.slice(0, -2));
+            setRenderedImageDimension({
+              height: height,
+              width: width,
+            });
+            setRenderedImagePosition({
+              x: position.x,
+              y: position.y,
+            });
+          }}
+          onDragStop={(_, data) => {
+            setRenderedImagePosition({
+              x: data.x,
+              y: data.y,
+            });
+          }}
           className="absolute z-20 border-[2px] border-primary"
           lockAspectRatio
           resizeHandleComponent={{
@@ -108,7 +229,7 @@ const DesignConfigurator = ({
         </Rnd>
       </div>
 
-      <div className="h-[37.5rem] flex flex-col bg-white">
+      <div className="h-[37.5rem] w-full col-span-full lg:col-span-1 flex flex-col bg-white">
         <ScrollArea className="relative flex-1 overflow-auto">
           <div
             className="absolute z-10 inset-x-0 bottom-0 h-12 bg-gradient-to-t from-white to-white/50 pointer-events-none "
@@ -172,9 +293,8 @@ const DesignConfigurator = ({
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     {MODELS.options.map((model) => (
-                      <>
+                      <div key={model.value}>
                         <DropdownMenuItem
-                          key={model.value}
                           className={cn(
                             "flex text-sm gap-1 items-center p-1.5 cursor-default hover:bg-zinc-100 hover:cursor-pointer",
                             {
@@ -197,7 +317,7 @@ const DesignConfigurator = ({
                           {model.label}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                      </>
+                      </div>
                     ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -264,6 +384,25 @@ const DesignConfigurator = ({
             </div>
           </div>
         </ScrollArea>
+
+        <div className="w-full px-8 h-16 bg-white">
+          <div className="h-px w-full bg-zinc-200" />
+          <div className="w-full h-full flex justify-end items-center">
+            <div className="w-full flex gap-6 items-center">
+              <p className="font-medium whitespace-nowrap">
+                {formatPrice(
+                  BASE_PRICE / 100 +
+                    options.finish.price / 100 +
+                    options.material.price / 100
+                )}
+              </p>
+              <Button onClick={saveConfiguration} size="sm" className="w-full">
+                Continue
+                <ArrowRight className="size-4 ml-1.5" />
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
