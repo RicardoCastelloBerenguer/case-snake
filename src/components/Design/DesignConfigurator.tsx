@@ -32,6 +32,12 @@ import { Description } from "@radix-ui/react-toast";
 import { BASE_PRICE } from "@/config/products";
 import { useUploadThing } from "@/lib/uploadthings";
 import { useToast } from "../ui/use-toast";
+import { useMutation } from "@tanstack/react-query";
+import {
+  saveConfig as _saveConfig,
+  SaveConfigArgs,
+} from "@/app/configure/design/actions";
+import { useRouter } from "next/navigation";
 
 interface DesignConfiguratorProps {
   configId: string;
@@ -45,6 +51,29 @@ const DesignConfigurator = ({
   imageUrl,
 }: DesignConfiguratorProps) => {
   const { toast } = useToast();
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const { mutate: saveConfig } = useMutation({
+    mutationKey: ["save-config"],
+    mutationFn: async (args: SaveConfigArgs) => {
+      setIsLoading(true);
+      await Promise.all([saveConfiguration(), _saveConfig(args)]);
+    },
+    onError: () => {
+      setIsLoading(false);
+      toast({
+        title: "Something went wrong",
+        description: "An error occurred on our servers. Please try again",
+        variant: "destructive",
+      });
+    },
+    onSuccess: () => {
+      setIsLoading(false);
+      router.push(`/configure/preview?id=${configId}`);
+    },
+  });
+
+  saveConfig;
 
   const [options, setOptions] = useState<{
     color: (typeof COLORS)[number];
@@ -86,11 +115,28 @@ const DesignConfigurator = ({
         phoneContainerRef.current!.getBoundingClientRect();
 
       const leftOffset = phoneCaseLeft - phoneContainerLeft;
-
       const topOffset = phoneCaseTop - phoneContainerTop;
+
+      // console.log(
+      //   phoneContainerTop +
+      //     " | " +
+      //     phoneContainerLeft +
+      //     " | " +
+      //     phoneCaseLeft +
+      //     " | " +
+      //     phoneCaseTop
+      // );
+
+      // console.log(leftOffset + " | " + topOffset);
+
+      // console.log("COORDS WITHOUT OFFSET -");
+      // console.log(renderedImagePosition.x + " | " + renderedImagePosition.y);
 
       const actualX = renderedImagePosition.x - leftOffset;
       const actualY = renderedImagePosition.y - topOffset;
+
+      // console.log("COORDS WITH OFFSET +");
+      // console.log(actualX + " | " + actualY);
 
       const canvas = document.createElement("canvas");
       canvas.width = width;
@@ -145,6 +191,7 @@ const DesignConfigurator = ({
 
     return new Blob([byteArray], { type: mimeType });
   };
+
   const loadImage = (
     imgElement: HTMLImageElement
   ): Promise<HTMLImageElement> => {
@@ -396,7 +443,22 @@ const DesignConfigurator = ({
                     options.material.price / 100
                 )}
               </p>
-              <Button onClick={saveConfiguration} size="sm" className="w-full">
+              <Button
+                isLoading={isLoading}
+                disabled={isLoading}
+                loadingText="Redirecting"
+                onClick={async () => {
+                  saveConfig({
+                    configId,
+                    caseColor: options.color.value,
+                    finish: options.finish.value,
+                    caseMaterial: options.material.value,
+                    model: options.model.value,
+                  });
+                }}
+                size="sm"
+                className="w-full"
+              >
                 Continue
                 <ArrowRight className="size-4 ml-1.5" />
               </Button>

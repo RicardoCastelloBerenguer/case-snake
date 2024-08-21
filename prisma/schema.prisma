@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,9 +8,92 @@ datasource db {
 }
 
 model Configuration {
-  id String @id @default(cuid())
-  width Int 
-  height Int
-  imageUrl String
+  id           String        @id @default(cuid())
+  width        Int
+  height       Int
+  imageUrl     String
   croppedImage String?
+  model        PhoneModel?
+  caseMaterial CaseMaterial?
+  finish       CaseFinish?
+  caseColor    CaseColor?
+  Order        Order[]
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String
+  Order     Order[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id                String           @id @default(cuid())
+  configurationId   String
+  configuration     Configuration    @relation(fields: [configurationId], references: [id])
+  user              User             @relation(fields: [userId], references: [id])
+  userId            String
+  price             Float
+  isPaid            Boolean          @default(false)
+  status            OrderStatus      @default(awaiting_shipment)
+  shippingAddress   ShippingAddress? @relation(fields: [shippingAddressId], references: [id])
+  shippingAddressId String?
+  billingAddress    BillingAddress?  @relation(fields: [billingAddressId], references: [id])
+  billingAddressId  String?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+}
+
+model ShippingAddress {
+  id          String  @id @default(cuid())
+  name        String
+  street      String
+  city        String
+  postalCode  String
+  country     String
+  phoneNumber String?
+  orders      Order[]
+}
+
+model BillingAddress {
+  id          String  @id @default(cuid())
+  name        String
+  street      String
+  city        String
+  postalCode  String
+  country     String
+  phoneNumber String?
+  orders      Order[]
+}
+
+enum OrderStatus {
+  fulfilled
+  shipped
+  awaiting_shipment
+}
+
+enum PhoneModel {
+  iphonex
+  iphone11
+  iphone12
+  iphone13
+  iphone14
+  iphone15
+}
+
+enum CaseMaterial {
+  silicone
+  polycarbonate
+}
+
+enum CaseFinish {
+  smooth
+  textured
+}
+
+enum CaseColor {
+  black
+  rose
+  blue
 }

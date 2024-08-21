@@ -66,7 +66,7 @@ const Navbar = async () => {
                 size: "sm",
                 className: "hidden sm:flex items-center gap-1",
               })}
-              href="/api/auth/logout"
+              href="/configure/upload"
             >
               Create case
               <ArrowRight className="ml-1.5 size-5"></ArrowRight>

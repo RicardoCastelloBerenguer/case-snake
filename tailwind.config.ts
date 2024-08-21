@@ -80,10 +80,15 @@ const config = {
             transform: "translateY(-50%)",
           },
         },
+        flashing: {
+          "0% , 100%": { opacity: "0.2" },
+          "20%": { opacity: "1" },
+        },
       },
       animation: {
         "fade-in": "fade-in linear 0.5s forwards",
         marquee: "marquee var(--marquee-duration) linear infinite",
+        flashing: "flashing 1.4s infinite linear",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
