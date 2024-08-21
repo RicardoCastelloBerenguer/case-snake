@@ -154,7 +154,6 @@ export default function Home() {
               }}
             />
             <UserReview
-              starCount={5}
               profile={{ imgUrl: "/users/user-3.png", name: "María" }}
               starCount={5}
               clientTextReview={{
@@ -168,7 +167,6 @@ export default function Home() {
             <UserReview
               starCount={5}
               profile={{ imgUrl: "/users/user-4.jpg", name: "Josh" }}
-              starCount={5}
               clientTextReview={{
                 firstText:
                   "My phone usually shares a pocket with my coins, which often results in my cases getting scratched up pretty quickly. Surprisingly,",

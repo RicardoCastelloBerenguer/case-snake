@@ -65,7 +65,7 @@ function ReviewColumn({
   reviews,
   className,
   reviewClassName,
-  msPerPixel,
+  msPerPixel = 0,
 }: {
   reviews: string[];
   className?: string;
