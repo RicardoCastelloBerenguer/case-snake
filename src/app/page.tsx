@@ -9,8 +9,15 @@ import { buttonVariants } from "@/components/ui/button";
 import UserReview from "@/components/UserReview";
 import { ArrowRight, Check, Star } from "lucide-react";
 import Link from "next/link";
+import { useEffect } from "react";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
-export default function Home() {
+export default async function Home() {
+  const { getUser } = getKindeServerSession();
+
+  const user = await getUser();
+  console.log(user);
+
   return (
     <div className="bg-slate-50 grainy-light">
       <section>
@@ -23,8 +30,8 @@ export default function Home() {
               </div>
               <h1 className="relative w-fit tracking-tight text-balance mt-16 font-bold !leading-tight text-gray-900 text-5xl md:text-6xl lg:text-7xl">
                 Your Image on a{" "}
-                <span className="bg-green-600 px-2 text-white">Custom</span>{" "}
-                Phone Case
+                <span className="bg-primary px-2 text-white">Custom</span> Phone
+                Case
               </h1>
               <p className="mt-8 text-lg lg:pr-10 max-w-prose text-center lg:text-left text-balance md:text-wrap">
                 Capture your favorite memories with your own,{" "}
@@ -36,15 +43,15 @@ export default function Home() {
               <ul className="mt-8 space-y-2 text-left font-medium flex flex-col items-center sm:items-start">
                 <div className="space-y-2">
                   <li className="flex gap-1.5 items-center text-left">
-                    <Check className="h-5 w-5 shrink-0 text-green-600" />
+                    <Check className="h-5 w-5 shrink-0 text-primary" />
                     High-quality, durable material
                   </li>
                   <li className="flex gap-1.5 items-center text-left">
-                    <Check className="h-5 w-5 shrink-0 text-green-600" />5 year
+                    <Check className="h-5 w-5 shrink-0 text-primary" />5 year
                     print guarantee
                   </li>
                   <li className="flex gap-1.5 items-center text-left">
-                    <Check className="h-5 w-5 shrink-0 text-green-600" />
+                    <Check className="h-5 w-5 shrink-0 text-primary" />
                     Modern iPhone models supported
                   </li>
                 </div>
@@ -81,11 +88,11 @@ export default function Home() {
 
                 <div className="flex flex-col justify-between items-center sm:items-start">
                   <div className="flex gap-0.5">
-                    <Star className="h-4 w-4 text-green-600 fill-green-600" />
-                    <Star className="h-4 w-4 text-green-600 fill-green-600" />
-                    <Star className="h-4 w-4 text-green-600 fill-green-600" />
-                    <Star className="h-4 w-4 text-green-600 fill-green-600" />
-                    <Star className="h-4 w-4 text-green-600 fill-green-600" />
+                    <Star className="h-4 w-4 text-primary fill-primary" />
+                    <Star className="h-4 w-4 text-primary fill-primary" />
+                    <Star className="h-4 w-4 text-primary fill-primary" />
+                    <Star className="h-4 w-4 text-primary fill-primary" />
+                    <Star className="h-4 w-4 text-primary fill-primary" />
                   </div>
 
                   <p>
@@ -119,7 +126,7 @@ export default function Home() {
               What our{" "}
               <span className="relative px-2">
                 costumers{" "}
-                <Icons.underline className="hidden sm:block pointer-events-none inset-x-0 absolute -bottom-6 text-green-500"></Icons.underline>{" "}
+                <Icons.underline className="hidden sm:block pointer-events-none inset-x-0 absolute -bottom-6 text-primary"></Icons.underline>{" "}
               </span>{" "}
               say
             </h2>
@@ -189,7 +196,7 @@ export default function Home() {
             <div className="mx-auto max-w-2xl sm:text-center">
               <h2 className="order-1 mt-2 tracking-tight text-center text-balance !leading-tight font-bold text-5xl md:text-6xl text-gray-900">
                 Upload your photo and get{" "}
-                <span className="relative px-2 bg-green-600 text-white">
+                <span className="relative px-2 bg-primary text-white">
                   your own case{" "}
                 </span>{" "}
                 now
@@ -219,23 +226,23 @@ export default function Home() {
 
           <ul className="mx-auto mt-12 max-w-prose sm:text-lg space-y-2 w-fit">
             <li className="w-fit">
-              <Check className="size-5 text-green-600 inline mr-1.5 " />
+              <Check className="size-5 text-primary inline mr-1.5 " />
               <p className="inline">High quality silicone material</p>
             </li>
             <li className="w-fit">
-              <Check className="size-5 text-green-600 inline mr-1.5 " />
+              <Check className="size-5 text-primary inline mr-1.5 " />
               <p className="inline">Anti-slip to prevent accidental drops</p>
             </li>
             <li className="w-fit">
-              <Check className="size-5 text-green-600 inline mr-1.5 " />
+              <Check className="size-5 text-primary inline mr-1.5 " />
               <p className="inline">Scratch and wear-resistant</p>
             </li>
             <li className="w-fit">
-              <Check className="size-5 text-green-600 inline mr-1.5 " />
+              <Check className="size-5 text-primary inline mr-1.5 " />
               <p className="inline">5 year print warranty</p>
             </li>
             <li className="w-fit">
-              <Check className="size-5 text-green-600 inline mr-1.5 " />
+              <Check className="size-5 text-primary inline mr-1.5 " />
               <p className="inline">Compatibility with wireless charging</p>
             </li>
 

@@ -68,7 +68,12 @@ const DesignConfigurator = ({
       });
     },
     onSuccess: () => {
-      setIsLoading(false);
+      console.log("set Off");
+      setTimeout(() => {
+        console.log("set On");
+        setIsLoading(false);
+      }, 1000);
+
       router.push(`/configure/preview?id=${configId}`);
     },
   });

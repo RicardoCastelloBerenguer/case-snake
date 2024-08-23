@@ -16,7 +16,7 @@ const UserReview = ({
   profile: { imgUrl: string; name: string };
 }) => {
   const stars = Array.from({ length: starCount }, (_, index) => (
-    <Star key={index} className="size-5 text-green-600 fill-green-600" />
+    <Star key={index} className="size-5 text-primary fill-primary" />
   ));
 
   return (
@@ -42,7 +42,7 @@ const UserReview = ({
         <div className="flex flex-col">
           <p className="font-semibold"> {profile.name}</p>
           <div className="flex gap-1.5 items-center text-zinc-600">
-            <Check className="size-4 stroke-[3px] text-green-600" />
+            <Check className="size-4 stroke-[3px] text-primary" />
             <p className="text-sm">Verified Purchase</p>
           </div>
         </div>
