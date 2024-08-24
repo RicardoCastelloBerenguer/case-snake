@@ -73,17 +73,17 @@ const DesignPreview = ({ configuration }: { configuration: Configuration }) => {
       <LoginModal isOpen={isLoginModalOpen} setIsOpen={setIsLoginModalOpen} />
 
       <div
-        className="mt-20 grid grid-cols-1 text-sm sm:grid-cols-12 sm:grid-rows-1 
+        className="mt-20 flex flex-col md:grid text-sm sm:grid-cols-12 sm:grid-rows-1 
       sm:gap-x-6 md:gap-x-8 lg:gap-x-12"
       >
-        <div className="sm:col-span-4 md:col-span-3 md:row-span-2 md:row-end-2">
+        <div className="sm:col-span-4 md:col-span-4 md:row-span-2 md:row-end-2 flex items-center justify-center">
           <Phone
-            className={cn(`bg-${tw}`)}
+            className={cn(`bg-${tw}`, "max-w-[200px] md:max-w-full")}
             imgSource={configuration.croppedImage!}
           />
         </div>
 
-        <div className="mt-6 sm:col-span-9 sm-mt-0 md:row-end-1">
+        <div className="mt-6 sm:col-span-9  md:row-end-1">
           <h3 className="text-3xl font-bold tracking-tight">
             Your {modelLabel} case
           </h3>

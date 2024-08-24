@@ -1,7 +1,9 @@
 import { db } from "@/db";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
-import React from "react";
+
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 
 import {
   Card,
@@ -11,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
 import { cn, formatPrice } from "@/lib/utils";
 
 import {
@@ -26,11 +29,18 @@ import {
 
 import { Progress } from "@/components/ui/progress";
 import StatusDropdown from "./StatusDropdown";
+import TimeFilterSelect from "./TimeFilterSelect";
 
-const Page = async () => {
+const Page = async ({
+  searchParams,
+}: {
+  searchParams: { timeFilter?: number };
+}) => {
   const { getUser } = getKindeServerSession();
 
   const user = await getUser();
+
+  let timeFilter = searchParams.timeFilter || 7;
 
   if (!user || user.email !== process.env.ADMIN_EMAIL) {
     return redirect("/");
@@ -39,7 +49,7 @@ const Page = async () => {
   const orders = await db.order.findMany({
     where: {
       createdAt: {
-        gte: new Date(new Date().setDate(new Date().getDate() - 7)),
+        gte: new Date(new Date().setDate(new Date().getDate() - timeFilter)),
       },
     },
     orderBy: {
@@ -51,13 +61,11 @@ const Page = async () => {
     },
   });
 
-  console.log(orders);
-
   const lastOrdersSum = await db.order.aggregate({
     where: {
       isPaid: true,
       createdAt: {
-        gte: new Date(new Date().setDate(new Date().getDate() - 7)),
+        gte: new Date(new Date().setDate(new Date().getDate() - timeFilter)),
       },
     },
     _sum: {
@@ -65,9 +73,7 @@ const Page = async () => {
     },
   });
 
-  const WEEKLY_GOAL = 500;
-
-  console.log(orders);
+  const WEEKLY_GOAL = 500 * (timeFilter / 7);
 
   return (
     <div className="flex min-h-screen w-full bg-muted/40 px-2 py-2">
@@ -75,11 +81,14 @@ const Page = async () => {
         <div className="flex flex-col gap-16">
           <div className="grid gap-4 sm:grid-cols-2">
             <Card>
-              <CardHeader className="pb-2">
-                <CardDescription>Last Orders</CardDescription>
-                <CardTitle className="text-4xl">
-                  {formatPrice(lastOrdersSum._sum.price ?? 0)}
-                </CardTitle>
+              <CardHeader className="pb-2 flex flex-row justify-between">
+                <div className="w-full h-full">
+                  <CardDescription>Last Orders</CardDescription>
+                  <CardTitle className="text-4xl">
+                    {formatPrice(lastOrdersSum._sum.price ?? 0)}
+                  </CardTitle>
+                </div>
+                <TimeFilterSelect />
               </CardHeader>
               <CardContent>
                 <div className="text-sm text-muted-foreground">
@@ -138,8 +147,6 @@ const Page = async () => {
                   </TableRow>
                 );
               })}
-
-              {/* */}
             </TableBody>
           </Table>
         </div>

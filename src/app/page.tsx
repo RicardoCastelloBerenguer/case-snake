@@ -18,6 +18,8 @@ export default async function Home() {
   const user = await getUser();
   console.log(user);
 
+  debugger;
+
   return (
     <div className="bg-slate-50 grainy-light">
       <section>

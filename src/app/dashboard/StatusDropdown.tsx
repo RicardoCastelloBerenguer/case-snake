@@ -74,7 +74,7 @@ const StatusDropdown = ({
                   orderStatus === status ? "opacity-100" : "opacity-0"
                 )}
               />
-              {LABEL_MAP_STATUS[status]}
+              {LABEL_MAP_STATUS[status as OrderStatus]}
             </DropdownMenuItem>
           ))}
         </DropdownMenuGroup>

@@ -53,7 +53,7 @@ const DesignConfigurator = ({
   const { toast } = useToast();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const { mutate: saveConfig } = useMutation({
+  const { mutate: saveConfig, isPending } = useMutation({
     mutationKey: ["save-config"],
     mutationFn: async (args: SaveConfigArgs) => {
       setIsLoading(true);
@@ -449,8 +449,8 @@ const DesignConfigurator = ({
                 )}
               </p>
               <Button
-                isLoading={isLoading}
-                disabled={isLoading}
+                isLoading={isPending}
+                disabled={isPending}
                 loadingText="Redirecting"
                 onClick={async () => {
                   saveConfig({
