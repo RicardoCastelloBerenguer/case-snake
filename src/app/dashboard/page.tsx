@@ -38,7 +38,7 @@ const Page = async ({
 }: {
   searchParams: { timeFilter?: number };
 }) => {
-  const user = useUser();
+  // const user = useUser();
 
   // console.log(user);
 

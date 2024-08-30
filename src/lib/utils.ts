@@ -1,5 +1,3 @@
-"use client";
-
 import { useUser } from "@/contexts/userContext";
 import { User } from "@prisma/client";
 import { type ClassValue, clsx } from "clsx";
