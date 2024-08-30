@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Phone from "../Phone";
 import { Configuration } from "@prisma/client";
 import { cn, formatPrice } from "@/lib/utils";
@@ -14,10 +14,12 @@ import { useRouter } from "next/navigation";
 import { useToast } from "../ui/use-toast";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import LoginModal from "../LoginModal";
+import { useUser } from "@/contexts/userContext";
 
 const DesignPreview = ({ configuration }: { configuration: Configuration }) => {
+  const { user } = useUser();
   const { caseColor, model, finish, caseMaterial } = configuration;
-  const { user } = useKindeBrowserClient();
+  const { isLoggedIn } = useUser();
 
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isLoadingRedirect, setIsLoadingRedirect] = useState(false);
@@ -47,7 +49,8 @@ const DesignPreview = ({ configuration }: { configuration: Configuration }) => {
       else throw new Error("Unable to retrieve payment URL");
       setIsLoadingRedirect(false);
     },
-    onError: () => {
+    onError: (error) => {
+      console.log(error);
       toast({
         title: "Something went wrong",
         description: "There was an error on our server, Try again later.",
@@ -58,15 +61,22 @@ const DesignPreview = ({ configuration }: { configuration: Configuration }) => {
   });
 
   const handleChekout = () => {
-    setIsLoadingRedirect(true);
-    console.log("first");
-    if (user) {
-      createPaymentSession({ configId: configuration.id });
+    if (isLoggedIn) {
+      setIsLoadingRedirect(true);
+      createPaymentSession({
+        configId: configuration.id,
+        userLogged: { email: user!.email },
+      });
     } else {
       localStorage.setItem("configurationId", configuration.id);
       setIsLoginModalOpen(true);
     }
   };
+
+  useEffect(() => {
+    console.log("removing");
+    localStorage.removeItem("configurationId");
+  }, []);
 
   return (
     <>

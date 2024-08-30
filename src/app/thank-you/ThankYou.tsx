@@ -6,13 +6,16 @@ import { useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import PhonePreview from "@/components/PhonePreview";
 import { formatPrice } from "@/lib/utils";
+import { useUser } from "@/contexts/userContext";
 
 const ThankYou = () => {
+  const { user } = useUser();
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId") || "";
   const { data } = useQuery({
     queryKey: ["get-payment-status"],
-    queryFn: async () => await getPaymentStatus({ orderId }),
+    queryFn: async () =>
+      await getPaymentStatus({ orderId, userLoggedIn: { email: user!.email } }),
     retry: true,
     retryDelay: 700,
   });

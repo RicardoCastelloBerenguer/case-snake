@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import ShadcnImage from "next/image";
 
@@ -38,6 +38,7 @@ import {
   SaveConfigArgs,
 } from "@/app/configure/design/actions";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/contexts/userContext";
 
 interface DesignConfiguratorProps {
   configId: string;
@@ -50,9 +51,14 @@ const DesignConfigurator = ({
   imageDimensions,
   imageUrl,
 }: DesignConfiguratorProps) => {
+  const { isLoggedIn } = useUser();
+
   const { toast } = useToast();
+
   const router = useRouter();
+
   const [isLoading, setIsLoading] = useState(false);
+
   const { mutate: saveConfig, isPending } = useMutation({
     mutationKey: ["save-config"],
     mutationFn: async (args: SaveConfigArgs) => {
@@ -122,26 +128,8 @@ const DesignConfigurator = ({
       const leftOffset = phoneCaseLeft - phoneContainerLeft;
       const topOffset = phoneCaseTop - phoneContainerTop;
 
-      // console.log(
-      //   phoneContainerTop +
-      //     " | " +
-      //     phoneContainerLeft +
-      //     " | " +
-      //     phoneCaseLeft +
-      //     " | " +
-      //     phoneCaseTop
-      // );
-
-      // console.log(leftOffset + " | " + topOffset);
-
-      // console.log("COORDS WITHOUT OFFSET -");
-      // console.log(renderedImagePosition.x + " | " + renderedImagePosition.y);
-
       const actualX = renderedImagePosition.x - leftOffset;
       const actualY = renderedImagePosition.y - topOffset;
-
-      // console.log("COORDS WITH OFFSET +");
-      // console.log(actualX + " | " + actualY);
 
       const canvas = document.createElement("canvas");
       canvas.width = width;
@@ -204,6 +192,10 @@ const DesignConfigurator = ({
       imgElement.onload = () => resolve(imgElement);
       imgElement.onerror = reject;
     });
+  };
+
+  const handleCheckoutRedirect = () => {
+    // if(!isLoggedIn) return;
   };
 
   return (
@@ -452,7 +444,7 @@ const DesignConfigurator = ({
                 isLoading={isPending}
                 disabled={isPending}
                 loadingText="Redirecting"
-                onClick={async () => {
+                onClick={() => {
                   saveConfig({
                     configId,
                     caseColor: options.color.value,

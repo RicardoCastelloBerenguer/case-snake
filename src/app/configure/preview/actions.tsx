@@ -3,13 +3,16 @@
 import { BASE_PRICE, PRODUCTS_PRICES } from "@/config/products";
 import { db } from "@/db";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { Order } from "@prisma/client";
+import { Order, User } from "@prisma/client";
 import { stripe } from "@/lib/stripe";
+import { getUserByEmail } from "@/api/user";
 
 export const createCheckoutSession = async ({
   configId,
+  userLogged,
 }: {
   configId: string;
+  userLogged: { email: string };
 }) => {
   const configuration = await db.configuration.findUnique({
     where: { id: configId },
@@ -19,8 +22,9 @@ export const createCheckoutSession = async ({
     throw new Error("The configuration doesnt exist");
   }
 
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
+  const user = await getUserByEmail(userLogged.email);
+
+  console.log(user);
 
   if (!user) {
     throw new Error("The user is not logged in");
@@ -38,12 +42,10 @@ export const createCheckoutSession = async ({
 
   const orderExist = await db.order.findFirst({
     where: {
-      userId: user.id,
+      userId: (user as User).id,
       configurationId: configuration.id,
     },
   });
-
-  console.log(user.id);
 
   if (orderExist) {
     order = orderExist;
@@ -51,7 +53,7 @@ export const createCheckoutSession = async ({
     order = await db.order.create({
       data: {
         price: price / 100,
-        userId: user.id,
+        userId: (user as User).id,
         configurationId: configuration.id,
       },
     });
@@ -72,7 +74,7 @@ export const createCheckoutSession = async ({
     payment_method_types: ["card", "paypal"],
     mode: "payment",
     metadata: {
-      userId: user.id,
+      userId: (user as User).id,
       orderId: order.id,
     },
     shipping_address_collection: {

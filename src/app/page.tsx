@@ -1,25 +1,16 @@
+"use server";
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import Icons from "@/components/Icons";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import Phone from "@/components/Phone";
 import Reviews from "@/components/Reviews";
-import Footer from "@/components/Footer";
 import { buttonVariants } from "@/components/ui/button";
 import UserReview from "@/components/UserReview";
-import { ArrowRight, Check, Star } from "lucide-react";
+import { Check, Star } from "lucide-react";
 import Link from "next/link";
-import { useEffect } from "react";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
 export default async function Home() {
-  const { getUser } = getKindeServerSession();
-
-  const user = await getUser();
-  console.log(user);
-
-  debugger;
-
   return (
     <div className="bg-slate-50 grainy-light">
       <section>

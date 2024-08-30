@@ -1,9 +1,10 @@
+/* eslint-disable @next/next/no-async-client-component */
 import { db } from "@/db";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
 
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Card,
@@ -30,21 +31,24 @@ import {
 import { Progress } from "@/components/ui/progress";
 import StatusDropdown from "./StatusDropdown";
 import TimeFilterSelect from "./TimeFilterSelect";
+import { useUser } from "@/contexts/userContext";
 
 const Page = async ({
   searchParams,
 }: {
   searchParams: { timeFilter?: number };
 }) => {
-  const { getUser } = getKindeServerSession();
+  const user = useUser();
 
-  const user = await getUser();
+  // console.log(user);
 
   let timeFilter = searchParams.timeFilter || 7;
 
-  if (!user || user.email !== process.env.ADMIN_EMAIL) {
-    return redirect("/");
-  }
+  // useEffect(() => {
+  //   if (!user || isAdminFunction()) {
+  //     return redirect("/");
+  //   }
+  // }, [user]);
 
   const orders = await db.order.findMany({
     where: {
