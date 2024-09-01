@@ -26,9 +26,14 @@ export const encryptPassword = async (password: string): Promise<string> => {
 };
 
 export const isAdmin = (email: string | undefined) => {
-  if (!email) return;
   const adminEmail = process.env.ADMIN_EMAIL;
-  console.log(email.includes(adminEmail!));
+  console.log(email === adminEmail);
 
-  return email.includes(adminEmail!);
+  if (!email) return false;
+  console.log(adminEmail);
+  if (email === adminEmail) return true;
+  return false;
+  // console.log(email.includes(adminEmail!));
+
+  // return email.includes(adminEmail!);
 };

@@ -5,18 +5,19 @@ import { Button, buttonVariants } from "./ui/button";
 import { ArrowRight } from "lucide-react";
 import { color } from "framer-motion";
 import { useUser } from "@/contexts/userContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { isAdmin as isAdminFunction } from "@/lib/auth";
 
 const Navbar = () => {
   const { user, isLoading, isLoggedIn, logout } = useUser();
-
-  let isAdmin = isAdminFunction(user?.email);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    isAdmin = isAdminFunction(user?.email);
-  }, [user]);
+    if (isLoggedIn) {
+      setIsAdmin(JSON.parse(localStorage.getItem("currentUser")!).admin);
+    }
+  }, [isLoggedIn, user]);
 
   return (
     <nav className="sticky z-[100] h-14 inset-x-0 top-0 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
@@ -28,9 +29,6 @@ const Navbar = () => {
           <div className="h-full flex flex-items items-center space-x-4">
             {isLoggedIn ? (
               <>
-                {/* <p>{user?.email === process.env.ADMIN_EMAIL ? "Jola" : "kk"}</p> */}
-                {/* <p>{user?.email}</p> */}
-                <p>{process.env.ADMIN_EMAIL}</p>
                 {isAdmin && (
                   <Link
                     className={buttonVariants({

@@ -8,6 +8,7 @@ import PhonePreview from "@/components/PhonePreview";
 import { formatPrice } from "@/lib/utils";
 import { useUser } from "@/contexts/userContext";
 import { toast } from "@/components/ui/use-toast";
+import RedirectIfNotLoggedIn from "../dashboard/RedirectIfNotLoggedIn";
 
 const ThankYou = () => {
   const router = useRouter();
@@ -78,6 +79,7 @@ const ThankYou = () => {
 
   return (
     <div className="bg-white ">
+      <RedirectIfNotLoggedIn />
       <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
         <div className="max-w-xl">
           <p className="text-base font-medium text-primary">Thank you!</p>

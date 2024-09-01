@@ -37,7 +37,7 @@ export const loginUser = async (userIntroduced: {
   if (matchPasswords) {
     saveUserOnCache({
       email: existingUser.email,
-      admin: isAdmin(existingUser.email) ? true : false,
+      admin: await isAdmin(existingUser.email),
     });
   } else {
     throw new Error(
