@@ -2,7 +2,6 @@
 
 import { getUserByEmail } from "@/api/user";
 import { db } from "@/db";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
 
 export const getPaymentStatus = async ({

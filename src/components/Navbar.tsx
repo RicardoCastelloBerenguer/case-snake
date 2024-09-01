@@ -15,7 +15,7 @@ const Navbar = () => {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     if (isLoggedIn) {
-      setIsAdmin(JSON.parse(localStorage.getItem("currentUser")!).admin);
+      setIsAdmin(user!.email === "ricardocastellob@gmail.com");
     }
   }, [isLoggedIn, user]);
 
@@ -29,17 +29,15 @@ const Navbar = () => {
           <div className="h-full flex flex-items items-center space-x-4">
             {isLoggedIn ? (
               <>
-                {isAdmin && (
-                  <Link
-                    className={buttonVariants({
-                      size: "sm",
-                      variant: "ghost",
-                    })}
-                    href="/dashboard"
-                  >
-                    Dashboard ✨
-                  </Link>
-                )}
+                <Link
+                  className={buttonVariants({
+                    size: "sm",
+                    variant: "ghost",
+                  })}
+                  href="/dashboard"
+                >
+                  Dashboard ✨
+                </Link>
 
                 <Button
                   disabled={isLoading}

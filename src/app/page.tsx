@@ -17,9 +17,12 @@ export default async function Home() {
         <MaxWidthWrapper className="pb-24 pt-10 lg:grid lg:grid-cols-3 sm:pb-32 lg:gap-x-0 xl:gap-x-8 lg:pt-24 xl:pt-32 lg:pb-52">
           <div className="col-span-2 px-6 lg:px-0 lg:pt-4">
             <div className="relative mx-auto text-center lg:text-left flex flex-col items-center lg:items-start">
-              <div className="absolute w-28 left-0 -top-20 hidden lg:block">
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t via-slate-50/50 from-slate-50 h-28" />
-                <img src="/snake-1.png" className="w-full" />
+              <div className="absolute w-28 left-6 -top-30 hidden lg:block">
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t via-slate-50/50 from-slate-50 h-6" />
+                <img
+                  src="/snake-1-variation.png"
+                  className="w-full h-full scale-150"
+                />
               </div>
               <h1 className="relative w-fit tracking-tight text-balance mt-16 font-bold !leading-tight text-gray-900 text-5xl md:text-6xl lg:text-7xl">
                 Your Image on a{" "}
@@ -125,7 +128,7 @@ export default async function Home() {
             </h2>
 
             <img
-              src="/snake-2.png"
+              src="/snake-2-variation.png"
               className="w-28 order-0 lg:order-2"
               alt=""
             />
@@ -207,13 +210,13 @@ export default async function Home() {
 
               <div className="relative h-80 md:h-full w-full md:justify-self-end max-w-sm rounded-xl bg-gray-900/5 ring-inset ring-gray-900/10 lg:rounded-2xl">
                 <img
-                  src="/horse.jpg"
+                  src="/phone-starts.jpg"
                   className="rounded-md object-cover bg-white shadow-2xl ring-1 ring-gray-900/10 h-full w-full"
                   alt="Horse Image"
                 />
               </div>
 
-              <Phone className="w-60" imgSource="/horse.jpg" />
+              <Phone className="w-60" imgSource="/phone-starts.jpg" />
             </div>
           </div>
 

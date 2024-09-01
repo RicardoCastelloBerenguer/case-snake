@@ -7,7 +7,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { LoginLink, RegisterLink } from "@kinde-oss/kinde-auth-nextjs";
 import Image from "next/image";
 import type { Dispatch, SetStateAction } from "react";
 import { buttonVariants } from "./ui/button";
@@ -26,8 +25,8 @@ const LoginModal = ({
         <DialogHeader>
           <div className="relative mx-auto size-24 mb-2">
             <Image
-              src="/snake-1.png"
-              className="object-contain"
+              src="/snake-test.png"
+              className="object-contain scale-150"
               alt="logo image"
               fill
             />

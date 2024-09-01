@@ -12,9 +12,9 @@ import { useMutation } from "@tanstack/react-query";
 import { createCheckoutSession } from "@/app/configure/preview/actions";
 import { useRouter } from "next/navigation";
 import { useToast } from "../ui/use-toast";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import LoginModal from "../LoginModal";
 import { useUser } from "@/contexts/userContext";
+import InfoPaymentModal from "../InfoPaymentModal";
 
 const DesignPreview = ({ configuration }: { configuration: Configuration }) => {
   const { user } = useUser();
@@ -22,6 +22,8 @@ const DesignPreview = ({ configuration }: { configuration: Configuration }) => {
   const { isLoggedIn } = useUser();
 
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+
   const [isLoadingRedirect, setIsLoadingRedirect] = useState(false);
 
   const router = useRouter();
@@ -62,15 +64,19 @@ const DesignPreview = ({ configuration }: { configuration: Configuration }) => {
 
   const handleChekout = () => {
     if (isLoggedIn) {
-      setIsLoadingRedirect(true);
-      createPaymentSession({
-        configId: configuration.id,
-        userLogged: { email: user!.email },
-      });
+      setIsInfoModalOpen(true);
     } else {
       localStorage.setItem("configurationId", configuration.id);
       setIsLoginModalOpen(true);
     }
+  };
+
+  const createCheckout = () => {
+    setIsLoadingRedirect(true);
+    createPaymentSession({
+      configId: configuration.id,
+      userLogged: { email: user!.email },
+    });
   };
 
   useEffect(() => {
@@ -81,6 +87,13 @@ const DesignPreview = ({ configuration }: { configuration: Configuration }) => {
   return (
     <>
       <LoginModal isOpen={isLoginModalOpen} setIsOpen={setIsLoginModalOpen} />
+      <InfoPaymentModal
+        isLoading={isLoadingRedirect}
+        loadingText="Redirecting..."
+        isOpen={isInfoModalOpen}
+        setIsOpen={setIsInfoModalOpen}
+        createPayment={createCheckout}
+      />
 
       <div
         className="mt-20 flex flex-col md:grid text-sm sm:grid-cols-12 sm:grid-rows-1 
@@ -110,19 +123,20 @@ const DesignPreview = ({ configuration }: { configuration: Configuration }) => {
             >
               <div>
                 <p className="font-medium text-zinc-950">Materials</p>
-                <ol className="mt-3 text-zinc-700 list-disc list-inside">
-                  <li>High quality bla bla bla</li>
-                  <li>High quality bla bla bla</li>
-                  <li>High quality bla bla bla</li>
-                  <li>High quality bla bla bla</li>
+                <ol className="mt-3 text-zinc-700 list-disc list-inside ">
+                  <li>High-quality TPU</li>
+                  <li>Scratch-resistant polycarbonate</li>
+                  <li>Soft microfiber to prevent scratches</li>
+                  <li>Precision cutouts for easy access</li>
                 </ol>
               </div>
 
               <div>
-                <p className="font-medium text-zinc-950">Materials</p>
+                <p className="font-medium text-zinc-950">Features</p>
                 <ol className="mt-3 text-zinc-700 list-disc list-inside">
-                  <li>High quality bla bla bla</li>
-                  <li>High quality bla bla bla</li>
+                  <li>Ultra-slim design </li>
+                  <li>Supports wireless charging</li>
+                  <li>Enhanced grip</li>
                 </ol>
               </div>
             </div>

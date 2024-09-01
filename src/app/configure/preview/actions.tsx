@@ -2,7 +2,6 @@
 
 import { BASE_PRICE, PRODUCTS_PRICES } from "@/config/products";
 import { db } from "@/db";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { Order, User } from "@prisma/client";
 import { stripe } from "@/lib/stripe";
 import { getUserByEmail } from "@/api/user";
@@ -24,7 +23,7 @@ export const createCheckoutSession = async ({
 
   const user = await getUserByEmail(userLogged.email);
 
-  console.log(user);
+  // console.log(user);
 
   if (!user) {
     throw new Error("The user is not logged in");
