@@ -2,23 +2,49 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { getPaymentStatus } from "./actions";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import PhonePreview from "@/components/PhonePreview";
 import { formatPrice } from "@/lib/utils";
 import { useUser } from "@/contexts/userContext";
+import { toast } from "@/components/ui/use-toast";
 
 const ThankYou = () => {
-  const { user } = useUser();
+  const router = useRouter();
+  const { user, isLoading, isLoggedIn, logout } = useUser();
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId") || "";
-  const { data } = useQuery({
+
+  const { data, error, isError } = useQuery({
     queryKey: ["get-payment-status"],
-    queryFn: async () =>
-      await getPaymentStatus({ orderId, userLoggedIn: { email: user!.email } }),
-    retry: true,
+    queryFn: async () => {
+      try {
+        console.log(user);
+        return await getPaymentStatus({
+          orderId,
+          userLoggedIn: { email: user!.email },
+        });
+      } catch (error) {
+        if (error instanceof Error) {
+          return Promise.reject(error);
+        }
+        return Promise.reject(new Error("Unknown error occurred"));
+      }
+    },
+    retry: false,
     retryDelay: 700,
+    enabled: !!user && !!user.email,
   });
+
+  if (isError && error instanceof Error) {
+    console.log(error);
+    toast({
+      title: "You cannot access this order",
+      description: error.message,
+      variant: "destructive",
+    });
+    router.push("/");
+  }
 
   if (data === undefined)
     return (

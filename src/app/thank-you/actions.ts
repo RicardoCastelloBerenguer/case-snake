@@ -12,6 +12,7 @@ export const getPaymentStatus = async ({
   orderId: string;
   userLoggedIn?: { email: string };
 }) => {
+  console.log(userLoggedIn);
   let user = undefined;
   // if (!userLoggedIn!.email) redirect("/");
   if (userLoggedIn) {
@@ -30,10 +31,7 @@ export const getPaymentStatus = async ({
     },
   });
 
-  console.log(orderId);
-  console.log(user.id);
-
-  if (!order) throw new Error("this order does not exist");
+  if (!order) throw new Error("This order does not exist");
   if (order.isPaid) return order;
   else return false;
 };
