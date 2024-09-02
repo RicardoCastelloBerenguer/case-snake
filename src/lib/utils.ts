@@ -21,18 +21,20 @@ export const constructMetadata = ({
   description = "From sleek designs to rugged protection, find the perfect case to complement your device and express your personality.",
   image = "/thumbnail.png",
   icons = "/favicon.ico",
+  baseUrl = process.env.NEXT_PUBLIC_SERVER_URL, // Asegúrate de cambiarlo a tu URL real
 }: {
   title?: string;
   description?: string;
   image?: string;
   icons?: string;
+  baseUrl?: string;
 } = {}): Metadata => {
-  // Implementación de la función para construir el metadata
   return {
     title,
     description,
+    metadataBase: new URL(baseUrl!), // Añadir metadataBase aquí
     openGraph: {
-      images: [{ url: image }],
+      images: [{ url: `${baseUrl}${image}` }], // Usar URL completa
       description,
       title,
     },
@@ -40,8 +42,8 @@ export const constructMetadata = ({
       card: "summary_large_image",
       title,
       description,
-      images: [image],
+      images: [`${baseUrl}${image}`], // Usar URL completa
     },
-    icons,
+    icons: `${baseUrl}${icons}`, // Usar URL completa para iconos también
   } as Metadata;
 };

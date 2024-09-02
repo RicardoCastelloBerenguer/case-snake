@@ -20,7 +20,7 @@ const RedirectIfNotLoggedIn = ({ children }: { children: React.ReactNode }) => {
         setLoading(false); // Autenticado, actualiza el estado de carga
       }
     }
-  }, [isLoggedIn, router]);
+  }, [isLoggedIn, router, user]);
 
   if (loading) {
     return (
